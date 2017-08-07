@@ -1,0 +1,2 @@
+# fortune
+Go test
