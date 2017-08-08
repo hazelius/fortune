@@ -1,12 +1,11 @@
-package main
+package csv
 
 import (
     "golang.org/x/text/encoding/japanese"
     "golang.org/x/text/transform"
     "encoding/csv"
-    "io"
-    "flag"
     "log"
+    "io"
     "os"
     "fmt"
 )
@@ -17,16 +16,15 @@ func failOnError(err error) {
     }
 }
 
-func main() {
-    flag.Parse()
+func Read(file_name string, output_file string) {
 
     //読み込みファイル準備
-    file1, err := os.Open(flag.Arg(0))
+    file1, err := os.Open(file_name)
     failOnError(err)
     defer file1.Close()
 
     //書き込みファイル準備
-    file2, err := os.Create(flag.Arg(1))
+    file2, err := os.Create(output_file)
     failOnError(err)
     defer file2.Close()
 
@@ -41,7 +39,6 @@ func main() {
     writer.UseCRLF = true //デフォルトはLFのみ
 //  writer.Comma = '\t'
 
-    log.Printf("Start")
     for {
         record, err := reader.Read() // 1行読み出す
         if err == io.EOF {
@@ -59,5 +56,4 @@ func main() {
 //      log.Printf("%#v", record[0] + "," + record[1])
     }
     writer.Flush()
-    log.Printf("Finish !")
 }
