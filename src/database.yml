@@ -1,0 +1,8 @@
+1:
+  host: "localhost"
+  username: "root"
+  password: ""
+2:
+  host: "localhost2"
+  username: "root2"
+  password: ""
