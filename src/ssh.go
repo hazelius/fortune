@@ -2,17 +2,15 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
-	"os"
 	"golang.org/x/crypto/ssh"
 )
 
-func ssh_test() {
+func ssh_test() (*ssh.Client, error) {
 	ip := "example.com" //サーバのアドレス
 	port := "22"            //ポート番号は文字列で指定
 	user := "user"         //ユーザ名
 
-	buf, err := ioutil.ReadFile("fileto/key")
+	buf, err := ioutil.ReadFile("pathto/key")
 	if err != nil {
 		panic(err)
 	}
@@ -30,17 +28,19 @@ func ssh_test() {
 	}
 
 	conn, err := ssh.Dial("tcp", ip+":"+port, config)
-	if err != nil {
-		log.Println(err)
-	}
-	defer conn.Close()
+	return conn, err
 
-	session, err := conn.NewSession()
-	if err != nil {
-		log.Println(err)
-	}
-	defer session.Close()
-
-	session.Stdout = os.Stdout
-	session.Run("ls")
+	// defer conn.Close()
+	//
+	// session, err := conn.NewSession()
+	// if err != nil {
+	// 	log.Println(err)
+	// }
+	// defer session.Close()
+	//
+	// out, err := session.CombinedOutput("ls")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// log.Println(string(out))
 }

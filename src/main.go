@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+  "golang.org/x/crypto/ssh"
 )
 
 func main() {
@@ -20,6 +21,13 @@ func main() {
 	fmt.Println(dbconf["1"])
 
 	Connect()
-  ssh_test()
+  var conn *ssh.Client
+  conn, err = ssh_test()
+  if err != nil {
+    log.Println(err)
+  }
+  defer conn.Close()
+  ftp_test(conn)
+
 	log.Printf("Finish !")
 }
