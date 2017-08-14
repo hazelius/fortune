@@ -1,26 +1,28 @@
 package main
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
 )
 
-func InitConf() {
-	viper.SetConfigType("yaml")
-	viper.SetConfigName("database")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig()
+var v_db = InitConf("database")
+var v_aws = InitConf("aws")
 
+func InitConf(file_name string) *viper.Viper {
+	v := viper.New()
+	v.SetConfigName(file_name)
+	v.AddConfigPath(".")
+	err := v.ReadInConfig()
 	if err != nil {
-		fmt.Println(err.Error())
+		panic(err)
 	}
 
-	// If no config is found, use the default(s)
-	viper.SetDefault("host", "localhost")
-
-	// fmt.Printf("\n%s\n\n", theMessage["host"])
+	return v
 }
 
 func GetDbInfo(db_no string) map[string]string{
-	return viper.GetStringMapString(db_no)
+	return v_db.GetStringMapString(db_no)
+}
+
+func GetAwsInfo(key string) string{
+	return v_aws.GetString(key)
 }

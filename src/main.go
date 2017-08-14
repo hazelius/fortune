@@ -6,14 +6,13 @@ import (
 )
 
 func main() {
+	var err error
 	log.Printf("Start")
+
 	flag.Parse()
 	input_file := flag.Arg(0)
 	output_file := flag.Arg(1)
 	Read(input_file, output_file)
-
-
-	InitConf()
 
 	Connect()
   conn, err := ssh_test()
@@ -23,5 +22,6 @@ func main() {
   defer conn.Close()
   ftp_test(conn)
 
+	ShowList()
 	log.Printf("Finish !")
 }
