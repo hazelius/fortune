@@ -2,9 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
-  "golang.org/x/crypto/ssh"
 )
 
 func main() {
@@ -14,15 +12,11 @@ func main() {
 	output_file := flag.Arg(1)
 	Read(input_file, output_file)
 
-	dbconf, err := GetConf()
-	if err != nil {
-		log.Printf(err.Error())
-	}
-	fmt.Println(dbconf["1"])
+
+	InitConf()
 
 	Connect()
-  var conn *ssh.Client
-  conn, err = ssh_test()
+  conn, err := ssh_test()
   if err != nil {
     log.Println(err)
   }

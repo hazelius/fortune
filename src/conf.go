@@ -1,25 +1,26 @@
 package main
 
 import (
-	"io/ioutil"
-
-	"gopkg.in/yaml.v2"
+	"fmt"
+	"github.com/spf13/viper"
 )
 
-type DBInfo struct {
-	Host     string `yaml:"host"`
-	UserName string `yaml:"username"`
-	Password string `yaml:"Password"`
-}
+func InitConf() {
+	viper.SetConfigType("yaml")
+	viper.SetConfigName("database")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
 
-func GetConf() (map[string]DBInfo, error) {
-	buf, err := ioutil.ReadFile("database.yml")
 	if err != nil {
-		panic(err)
+		fmt.Println(err.Error())
 	}
 
-	dbconf := make(map[string]DBInfo)
-	err = yaml.Unmarshal(buf, dbconf)
+	// If no config is found, use the default(s)
+	viper.SetDefault("host", "localhost")
 
-	return dbconf, err
+	// fmt.Printf("\n%s\n\n", theMessage["host"])
+}
+
+func GetDbInfo(db_no string) map[string]string{
+	return viper.GetStringMapString(db_no)
 }

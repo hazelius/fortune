@@ -8,13 +8,14 @@ import (
 )
 
 func Connect() {
-	db, err := sql.Open("mysql", "root:@/earth_local_201707")
+	db_info := GetDbInfo("1")
+	db, err := sql.Open("mysql", db_info["username"]+":"+db_info["password"]+"@/earth_local_201707")
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close() // 関数がリターンする直前に呼び出される
 
-	rows, err := db.Query("SELECT * FROM users") //
+	rows, err := db.Query("SELECT * FROM users")
 	if err != nil {
 		panic(err.Error())
 	}

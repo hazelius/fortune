@@ -6,11 +6,11 @@ import (
 )
 
 func ssh_test() (*ssh.Client, error) {
-	ip := "example.com" //サーバのアドレス
+	ip := "devadmin.cydascloud.com" //サーバのアドレス
 	port := "22"            //ポート番号は文字列で指定
-	user := "user"         //ユーザ名
+	user := "ec2-user"         //ユーザ名
 
-	buf, err := ioutil.ReadFile("pathto/key")
+	buf, err := ioutil.ReadFile("C:\\Users\\yousu_000\\.ssh\\id_rsa.amazon")
 	if err != nil {
 		panic(err)
 	}
