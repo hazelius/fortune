@@ -22,6 +22,9 @@ func main() {
   defer conn.Close()
   ftp_test(conn)
 
-	ShowList()
+	err = Download("test_cydas", "test.txt")
+	if err != nil {
+	    log.Printf("failed to download file, %v", err)
+	}
 	log.Printf("Finish !")
 }
