@@ -39,27 +39,29 @@ func main() {
 		os.Interrupt)
 
 	go func() {
-		s := <-signalCh
-		switch s {
-		// kill -SIGHUP XXXX
-		case syscall.SIGHUP:
-			fmt.Println("hungup")
-		// kill -SIGINT XXXX or Ctrl+c
-		case syscall.SIGINT:
-			fmt.Println("Warikomi")
-		// kill -SIGTERM XXXX
-		case syscall.SIGTERM:
-			fmt.Println("force stop")
-		// kill -SIGQUIT XXXX
-		case syscall.SIGQUIT:
-			fmt.Println("stop and core dump")
-		case os.Interrupt:
-			fmt.Println("Interrupt")
-		default:
-			fmt.Println("Unknown signal.")
+		select {
+		case s := <-signalCh:
+			switch s {
+			// kill -SIGHUP XXXX
+			case syscall.SIGHUP:
+				fmt.Println("hungup")
+			// kill -SIGINT XXXX or Ctrl+c
+			case syscall.SIGINT:
+				fmt.Println("Warikomi")
+			// kill -SIGTERM XXXX
+			case syscall.SIGTERM:
+				fmt.Println("force stop")
+			// kill -SIGQUIT XXXX
+			case syscall.SIGQUIT:
+				fmt.Println("stop and core dump")
+			case os.Interrupt:
+				fmt.Println("Interrupt")
+			default:
+				fmt.Println("Unknown signal.")
+			}
+			cancel()
+			return
 		}
-		cancel()
-		return
 	}()
 	<-exitCh
 }
