@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/signal"
@@ -9,72 +10,56 @@ import (
 )
 
 func main() {
-	signalChan := make(chan os.Signal, 1)
-	signal.Notify(signalChan,
+	ctx, cancel := context.WithCancel(context.Background())
+
+	exitCh := make(chan struct{})
+	go func(ctx context.Context) {
+		for {
+			fmt.Println("start...")
+			time.Sleep(3 * time.Second)
+			fmt.Println("end...")
+
+			select {
+			case <-ctx.Done():
+				fmt.Println("received done, exiting in 500 milliseconds")
+				time.Sleep(500 * time.Millisecond)
+				exitCh <- struct{}{}
+				return
+			default:
+			}
+		}
+	}(ctx)
+
+	signalCh := make(chan os.Signal, 1)
+	signal.Notify(signalCh,
 		syscall.SIGHUP,
 		syscall.SIGINT,
 		syscall.SIGTERM,
 		syscall.SIGQUIT,
 		os.Interrupt)
 
-	exitChan := make(chan int)
 	go func() {
-		for {
-			s := <-signalChan
-			switch s {
-			// kill -SIGHUP XXXX
-			case syscall.SIGHUP:
-				fmt.Println("hungup")
-
-			// kill -SIGINT XXXX or Ctrl+c
-			case syscall.SIGINT:
-				fmt.Println("Warikomi")
-
-			// kill -SIGTERM XXXX
-			case syscall.SIGTERM:
-				fmt.Println("force stop")
-				exitChan <- 0
-
-			// kill -SIGQUIT XXXX
-			case syscall.SIGQUIT:
-				fmt.Println("stop and core dump")
-				exitChan <- 0
-
-			case os.Interrupt:
-				fmt.Println("Interrupt")
-				exitChan <- 0
-
-			default:
-				fmt.Println("Unknown signal.")
-				exitChan <- 1
-			}
+		s := <-signalCh
+		switch s {
+		// kill -SIGHUP XXXX
+		case syscall.SIGHUP:
+			fmt.Println("hungup")
+		// kill -SIGINT XXXX or Ctrl+c
+		case syscall.SIGINT:
+			fmt.Println("Warikomi")
+		// kill -SIGTERM XXXX
+		case syscall.SIGTERM:
+			fmt.Println("force stop")
+		// kill -SIGQUIT XXXX
+		case syscall.SIGQUIT:
+			fmt.Println("stop and core dump")
+		case os.Interrupt:
+			fmt.Println("Interrupt")
+		default:
+			fmt.Println("Unknown signal.")
 		}
+		cancel()
+		return
 	}()
-
-	go func() {
-		for {
-			fmt.Println("start...")
-			time.Sleep(5 * time.Second)
-			fmt.Println("end...")
-		}
-	}()
-
-	code := <-exitChan
-	os.Exit(code)
+	<-exitCh
 }
-
-// func main() {
-// 	// サイズが1より大きいチャネルを作成
-// 	signals := make(chan os.Signal, 1)
-// 	// 最初のチャネル以降は、可変長引数で任意の数のシグナルを設定可能
-// 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM)
-// 	s := <-signals
-// 	switch s {
-// 	case syscall.SIGINT:
-// 		fmt.Println("SIGINT")
-// 	case syscall.SIGTERM:
-// 		fmt.Println("SIGTERM")
-// 	}
-// 	time.Sleep(5 * time.Second)
-// 	fmt.Println("runnning")
-// }
