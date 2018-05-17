@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+)
 
 func main() {
-    fmt.Printf("hello, world\n")
+	log.Print("Start")
+	fmt.Printf("hello, world\n")
+	name := fullname("John", "Smith")
+	fmt.Print("hello " + name)
+}
+
+func fullname(firstname, lastname string) string {
+	return fmt.Sprintf("%v %v", firstname, lastname)
 }
