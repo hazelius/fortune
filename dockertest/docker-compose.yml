@@ -8,6 +8,21 @@ services:
       - ./nginxdocker/:/usr/share/nginx/html/
     ports:
       - "8080:80"
+  # php
+  php:
+    # build はDockerfileからビルドすることを示す.
+    build: "./php"
+    volumes:
+      - ./php/:/var/www/html/
+    # depends_onで依存関係を示す
+    depends_on:
+      - mysql
+    ports:
+      - "80:80"
+    # links で連携させるコンテナを示す.
+    # depends_onはビルド時に依存関係を考慮してビルドさせるために指定.
+    links:
+      - mysql
   # mysql
   mysql:
     image: mysql

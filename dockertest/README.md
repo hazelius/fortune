@@ -8,6 +8,7 @@
 ローカルでWebページが開けることを確認  
 
     http://localhost:8080/
+    http://localhost/hello.php
 
 アプリの終了
 
