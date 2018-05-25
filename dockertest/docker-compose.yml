@@ -1,5 +1,8 @@
 version: '3.3'
 
+volumes:
+  mysqldata:
+
 services:
   # nginx
   nginx:
@@ -25,8 +28,11 @@ services:
       - mysql
   # mysql
   mysql:
-    image: mysql
+    image: mysql:5.6
     ports:
-      - "3306:3306"
+      - "33306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: abcdef
+      MYSQL_DATABASE: newscheme
+    volumes:
+      - mysqldata:/var/lib/mysql
