@@ -1,10 +1,11 @@
 # fortune
 
 Go test
-___
 
-1. 1つ目
-1. 2つ目
+---
+
+1. 1 つ目
+1. 2 つ目
 
 ```
 code
@@ -15,6 +16,6 @@ code
 <small>小さい文字</small>
 <video width="320" height="240" controls>
 
-  <source src="video.mov" type="video/mp4">
+  <source src="video.webm" type="video/webm">
 </video>
 </html>
