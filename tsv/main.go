@@ -9,11 +9,11 @@ import (
 
 func main() {
 	in := `"first_name"	"last_name"	"username"
-"Rob"	"Pike"	rob
+"Rob"	"Pike ""p"""	rob
 # lines beginning with a # character are ignored
 Ken	Thompson	"ken
 and show"
-"Robert"	"Griesemer"	"gri"
+"Robert\"	"Grie\\semer"	"gri"
 `
 	r := csv.NewReader(strings.NewReader(in))
 	r.Comma = '\t'
