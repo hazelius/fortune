@@ -6,6 +6,21 @@ import (
 )
 
 func main() {
+	sudoCommand()
+	dockerCommand()
+}
+
+func sudoCommand() {
+	cmd := "/bin/sh"
+	opt := []string{"-c", "sudo ls"}
+	out, err := exec.Command(cmd, opt...).CombinedOutput()
+	if err != nil {
+		fmt.Printf("エラー:%v\n", err)
+	}
+	fmt.Println(string(out))
+}
+
+func dockerCommand() {
 	fmt.Println("======= 01 Run")
 	out, err := exec.Command("cmd", "/C", "docker", "ps").CombinedOutput()
 	if err != nil {
