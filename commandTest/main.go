@@ -11,6 +11,7 @@ func main() {
 }
 
 func sudoCommand() {
+	// コメント
 	cmd := "/bin/sh"
 	opt := []string{"-c", "sudo ls"}
 	out, err := exec.Command(cmd, opt...).CombinedOutput()
