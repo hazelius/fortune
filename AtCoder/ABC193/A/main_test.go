@@ -13,8 +13,8 @@ func Test_run(t *testing.T) {
 		want string
 	}{
 		{name: "1", args: args{a: 100, b: 80}, want: "20"},
-		{name: "1", args: args{a: 7, b: 6}, want: "14.285714285714285714"},
-		{name: "1", args: args{a: 99999, b: 99998}, want: "0.00100001000010000100"},
+		{name: "1", args: args{a: 7, b: 6}, want: "14.285714285714286"},
+		{name: "1", args: args{a: 99999, b: 99998}, want: "0.001000010000100001"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
