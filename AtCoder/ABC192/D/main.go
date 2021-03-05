@@ -26,7 +26,7 @@ func run(y string, m int) string {
 	}
 
 	min := max(y) + 1
-	max := binarySearch(y, m, min, int(1e18+1))
+	max := binarySearch(y, m, min, m+1)
 	return fmt.Sprint(max - min + 1)
 }
 
