@@ -1,4 +1,4 @@
-// https://atcoder.jp/contests/dp/tasks/dp_d
+// https://atcoder.jp/contests/dp/tasks/dp_e
 
 package main
 
@@ -19,23 +19,33 @@ func readInt() int {
 
 func run(n, w int, wvs [][]int) int {
 	dp := make([][]int, n+1)
-	dp[0] = make([]int, w+1)
+	dp[0] = make([]int, 100001)
+	for i := 1; i < len(dp[0]); i++ {
+		dp[0][i] = w + 1
+	}
+
 	for i, wv := range wvs {
-		dp[i+1] = make([]int, w+1)
-		for wi := 0; wi <= w; wi++ {
-			if wi-wv[0] >= 0 {
-				dp[i+1][wi] = max(dp[i][wi], dp[i][wi-wv[0]]+wv[1])
+		dp[i+1] = make([]int, 100001)
+		for v1, w1 := range dp[i] {
+			if v1-wv[1] >= 0 {
+				dp[i+1][v1] = min(w1, dp[i][v1-wv[1]]+wv[0])
 			} else {
-				dp[i+1][wi] = dp[i][wi]
+				dp[i+1][v1] = w1
 			}
 		}
 	}
-	// fmt.Println(dp[n-1])
-	return dp[n][w]
+
+	for i := 100000; i >= 0; i-- {
+		if dp[n][i] <= w {
+			return i
+		}
+		// fmt.Println(dp[n][i])
+	}
+	return 0
 }
 
-func max(a, b int) int {
-	if a < b {
+func min(a, b int) int {
+	if a > b {
 		return b
 	}
 	return a
