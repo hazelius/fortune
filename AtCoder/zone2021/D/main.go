@@ -28,30 +28,29 @@ func run(s string) string {
 		}
 
 		if flg {
-			if c == ans[0] {
-				ans = ans[1:]
-			} else {
-				ans = append([]byte{c}, ans...)
-			}
+			ans = append([]byte{c}, ans...)
 		} else {
-			if c == ans[len(ans)-1] {
-				ans = ans[:len(ans)-1]
-			} else {
-				ans = append(ans, c)
-			}
+			ans = append(ans, c)
 		}
-	}
-
-	if !flg {
-		return string(ans)
 	}
 
 	l := len(ans)
 	ans2 := make([]byte, l)
+	ai := 0
 	for i := 0; i < l; i++ {
-		ans2[i] = ans[l-i-1]
+		c := ans[i]
+		if flg {
+			c = ans[l-i-1]
+		}
+
+		if ai > 0 && c == ans2[ai-1] {
+			ai--
+			continue
+		}
+		ans2[ai] = c
+		ai++
 	}
-	return string(ans2)
+	return string(ans2[:ai])
 }
 
 func main() {

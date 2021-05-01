@@ -26,9 +26,6 @@ func run(n, d, h int, dhs [][]int) float64 {
 		}
 	}
 
-	if ans < 0 {
-		ans = 0
-	}
 	return ans
 }
 
