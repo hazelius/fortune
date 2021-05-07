@@ -1,3 +1,4 @@
+// https://atcoder.jp/contests/abc197/tasks/abc197_e
 package main
 
 import (
@@ -16,50 +17,36 @@ func readInt() int {
 }
 
 func run(xcs [][]int) int {
-	c, r := 0, 0
-	s := sortxc(xcs)
-	fmt.Println(s)
-	for i, val := range s {
-		cmin := val[0]
-		cmax := val[1]
-		if c <= cmin && c <= cmax {
-			r += abs(cmax - c)
-			c = cmax
-		} else if c >= cmin && c >= cmax {
-			r += abs(cmin - c)
-			c = cmin
-		} else {
-			nmin := 0
-			nmax := 0
-			if i+1 > len(s) {
-				nmin = s[i+1][0]
-				nmax = s[i+1][1]
-			}
-
-			rmin := rout(c, cmin, cmax, nmin, nmax)
-			rmax := rout(c, cmax, cmin, nmin, nmax)
-			if rmin > rmax {
-				r += abs(c - cmax)
-				c = cmin
-			} else {
-				r += abs(c - cmin)
-				c = cmax
-			}
-			r += abs(cmin - cmax)
+	s := arrangexc(xcs)
+	dp := []int{0, 0}
+	pl, pr := 0, 0
+	for i := 1; i < len(s); i++ {
+		if s[i] == nil {
+			continue
 		}
-		fmt.Printf("c:%v, r:%v\n", c, r)
-	}
-	return r + c
-}
+		cl := s[i][0]
+		cr := s[i][1]
 
-func rout(r1, r2, r3, r4, r5 int) int {
-	a := abs(r2-r1) + abs(r3-r2) + abs(r4-r3) + abs(r5-r4)
-	b := abs(r2-r1) + abs(r3-r2) + abs(r5-r3) + abs(r4-r5)
-	return min(a, b)
+		suml := dp[0]
+		sumr := dp[1]
+		dp[0] = min((cr-cl)+abs(pl-cr)+suml, (cr-cl)+abs(pr-cr)+sumr)
+		dp[1] = min((cr-cl)+abs(pl-cl)+suml, (cr-cl)+abs(pr-cl)+sumr)
+
+		pl, pr = cl, cr
+	}
+
+	return dp[0]
 }
 
 func min(a, b int) int {
 	if a > b {
+		return b
+	}
+	return a
+}
+
+func max(a, b int) int {
+	if a < b {
 		return b
 	}
 	return a
@@ -72,36 +59,23 @@ func abs(a int) int {
 	return a
 }
 
-func sortxc(xcs [][]int) [][]int {
-	r := make([][]int, 0, len(xcs))
+func arrangexc(xcs [][]int) [][]int {
+	r := make([][]int, len(xcs)+2)
+	var maxc int
 	for _, v := range xcs {
-		flg := true
-		for ri, rv := range r {
-			if rv[2] > v[1] {
-				tmp := make([][]int, len(r)+1)
-				copy(tmp, r[:ri])
-				tmp[ri] = []int{v[0], v[0], v[1]}
-				copy(tmp[ri+1:], r[ri:])
-				r = tmp
-				flg = false
-				break
-			}
-
-			if rv[2] == v[1] {
-				if rv[0] > v[0] {
-					rv[0] = v[0]
-				} else if rv[1] < v[0] {
-					rv[1] = v[0]
-				}
-				flg = false
-				break
-			}
+		x := v[0]
+		c := v[1]
+		if r[c] == nil {
+			r[c] = []int{x, x}
+		} else {
+			r[c][0] = min(r[c][0], x)
+			r[c][1] = max(r[c][1], x)
 		}
-		if flg {
-			r = append(r, []int{v[0], v[0], v[1]})
-		}
+		maxc = max(maxc, c)
 	}
-	return r
+	r[0] = []int{0, 0}
+	r[maxc+1] = []int{0, 0}
+	return r[:maxc+2]
 }
 
 func main() {
