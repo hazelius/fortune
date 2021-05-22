@@ -16,7 +16,7 @@ func Test_run(t *testing.T) {
 		want string
 	}{
 		{name: "16", args: args{a: 21, b: 30, k: 1}, want: "aaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"},
-		{name: "17", args: args{a: 4, b: 4, k: 38}, want: "abaababb"},
+		// {name: "17", args: args{a: 4, b: 4, k: 38}, want: "abaababb"},
 		// {name: "18", args: args{a: 4, b: 4, k: 39}, want: "abaabbab"},
 		// {name: "19", args: args{a: 4, b: 4, k: 40}, want: "abaabbba"},
 		// {name: "19", args: args{a: 4, b: 4, k: 41}, want: "abaabbba"},
