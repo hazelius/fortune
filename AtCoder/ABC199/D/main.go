@@ -16,45 +16,31 @@ func readInt() int {
 }
 
 func run(n, m int, abs [][]int) int {
-	mapab := make(map[int][]int)
+	sides := make([][]int, n+1)
 	for _, ab := range abs {
 		a, b := ab[0], ab[1]
-		mapab[a] = append(mapab[a], b)
-		mapab[b] = append(mapab[b], a)
+		sides[a] = append(sides[a], b)
+		sides[b] = append(sides[b], a)
 	}
 
-	dp := make([]int, n+1)
-	dp[1] = 3
-	ans := 3
+	dp := make([][]int, n+1)
+	ans := 0
 	for i := 2; i <= n; i++ {
-		ans *= f(i, 0, dp, mapab)
+		dfs(i, 0, dp, sides)
 	}
-	fmt.Println(dp)
 	return ans
 }
 
-func f(c, p int, dp []int, mapab map[int][]int) int {
-	if dp[c] > 0 {
-		return 1
+func dfs(c, p int, dp, sides [][]int) {
+	if dp[c] != nil {
+		return
 	}
 
-	s, ok := mapab[c]
-	if !ok {
-		return 3
-	}
+	dp[c] = make([]int, 0)
 
-	for _, v := range s {
-		if v == p {
-			continue
-		}
-		if dp[v] > 0 {
-			n--
-		} else {
-		}
-		f(v, c, dp, mapab)
+	for _, v := range sides[c] {
+		dfs(v, c, dp, sides)
 	}
-
-	return dp[c][0] + dp[c][1] + dp[c][2]
 }
 
 func main() {
