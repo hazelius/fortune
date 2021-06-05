@@ -3,6 +3,12 @@ package main
 import "testing"
 
 func Test_run(t *testing.T) {
+	mm := 200000
+	mxy := make([][]int, mm)
+	for i := range mxy {
+		mxy[i] = []int{i, i}
+	}
+
 	type args struct {
 		n   int
 		m   int
@@ -33,6 +39,7 @@ func Test_run(t *testing.T) {
 			{1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}, {6, 7}, {7, 7}, {8, 7},
 			{1, 8}, {2, 8}, {3, 8}, {4, 8}, {5, 8}, {6, 8}, {7, 8}, {8, 8},
 		}}, want: 5},
+		{name: "4", args: args{n: 100000000, m: mm, xys: mxy}, want: 1},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -1,9 +1,11 @@
+// https://atcoder.jp/contests/abc203/tasks/abc203_e
 package main
 
 import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -16,54 +18,54 @@ func readInt() int {
 }
 
 func run(n, m int, xys [][]int) int {
-	mapxy := make(map[int][]bool)
+	mapxy := make(map[int][]int)
 	for _, xy := range xys {
 		bp, ok := mapxy[xy[0]]
 		if !ok {
-			bp = make([]bool, 2*n+1)
+			bp = make([]int, 0)
 		}
-		bp[xy[1]] = true
+		bp = append(bp, xy[1])
 		mapxy[xy[0]] = bp
 	}
 
-	dp := make([]bool, 2*n+1)
+	xs := make([]int, len(mapxy))
+	i := 0
+	for x := range mapxy {
+		xs[i] = x
+		i++
+	}
+	sort.Ints(xs)
+
+	dp := make(map[int]bool)
 	dp[n] = true
-	for i := 1; i < 2*n+1; i++ {
+	for _, i := range xs {
 		bp, ok := mapxy[i]
 		if !ok {
 			continue
 		}
 		// fmt.Printf("i:%v, bp:%v\n", i, bp)
-		newdp := make([]bool, 2*n+1)
-		for j, b := range bp {
-			if !b {
-				newdp[j] = dp[j]
-				continue
-			}
-			if j > 0 && dp[j-1] {
-				newdp[j] = true
-				continue
-			}
-			if j < 2*n && dp[j+1] {
-				newdp[j] = true
+		changes := make(map[int]bool)
+		for _, y := range bp {
+			if dp[y-1] || dp[y+1] {
+				changes[y] = true
+			} else if dp[y] {
+				changes[y] = false
 			}
 		}
-		dp = newdp
+		for k, b := range changes {
+			if b {
+				dp[k] = b
+			} else {
+				delete(dp, k)
+			}
+		}
 	}
-	fmt.Println(dp)
+	// fmt.Println(dp)
 
-	ans := 0
-	for _, v := range dp {
-		if v {
-			ans++
-		}
-	}
-	return ans
+	return len(dp)
 }
 
 func main() {
-	buf := make([]byte, 1024*1024)
-	sc.Buffer(buf, bufio.MaxScanTokenSize)
 	sc.Split(bufio.ScanWords)
 	n, m := readInt(), readInt()
 	xys := make([][]int, m)
