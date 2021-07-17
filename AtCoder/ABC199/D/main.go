@@ -1,13 +1,20 @@
+// RGB Coloring 2
+// https://atcoder.jp/contests/abc199/tasks/abc199_d
+
 package main
 
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 )
 
-var sc = bufio.NewScanner(os.Stdin)
+var sc *bufio.Scanner
+
+var used []bool
+var list []int
 
 func readInt() int {
 	sc.Scan()
@@ -15,40 +22,79 @@ func readInt() int {
 	return i
 }
 
-func run(n, m int, abs [][]int) int {
-	sides := make([][]int, n+1)
-	for _, ab := range abs {
-		a, b := ab[0], ab[1]
-		sides[a] = append(sides[a], b)
-		sides[b] = append(sides[b], a)
+func run(r io.Reader) int {
+	sc = bufio.NewScanner(r)
+	sc.Split(bufio.ScanWords)
+
+	n, m := readInt(), readInt()
+	abmap := make(map[int][]int)
+	for i := 0; i < m; i++ {
+		a, b := readInt(), readInt()
+		ab := abmap[a]
+		abmap[a] = append(ab, b)
+		ab = abmap[b]
+		abmap[b] = append(ab, a)
 	}
 
-	dp := make([][]int, n+1)
-	ans := 0
-	for i := 2; i <= n; i++ {
-		dfs(i, 0, dp, sides)
+	used = make([]bool, n+1)
+	cls := make([]int, n+1)
+	ans := 1
+	for i := 1; i <= n; i++ {
+		if used[i] {
+			continue
+		}
+		ans *= 3
+
+		list = make([]int, 0)
+		dfs(i, abmap)
+
+		cls[list[0]] = 1
+		ret := dfs2(1, abmap, cls)
+		ans *= ret
 	}
 	return ans
 }
 
-func dfs(c, p int, dp, sides [][]int) {
-	if dp[c] != nil {
+func dfs(p int, abmap map[int][]int) {
+	if used[p] {
 		return
 	}
+	used[p] = true
 
-	dp[c] = make([]int, 0)
-
-	for _, v := range sides[c] {
-		dfs(v, c, dp, sides)
+	list = append(list, p)
+	for _, ab := range abmap[p] {
+		dfs(ab, abmap)
 	}
 }
 
-func main() {
-	sc.Split(bufio.ScanWords)
-	n, m := readInt(), readInt()
-	abs := make([][]int, m)
-	for i := range abs {
-		abs[i] = []int{readInt(), readInt()}
+func dfs2(i int, abmap map[int][]int, cls []int) int {
+	if i >= len(list) {
+		return 1
 	}
-	fmt.Println(run(n, m, abs))
+
+	p := list[i]
+	ret := 0
+	for cl := 1; cl <= 3; cl++ {
+		cls[p] = cl
+
+		flg := false
+		for _, d := range abmap[p] {
+			if cls[d] == cl {
+				flg = true
+				break
+			}
+		}
+		if flg {
+			continue
+		}
+
+		ret += dfs2(i+1, abmap, cls)
+	}
+
+	cls[p] = 0
+	return ret
+}
+
+func main() {
+	fmt.Println(run(os.Stdin))
 }
