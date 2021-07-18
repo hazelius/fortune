@@ -62,28 +62,20 @@ func run(r io.Reader) int {
 		}
 		ret := false
 
-		if len(mm) <= 3 {
-			sum := 0
-			for m := range mm {
-				sum |= m
-			}
-			ret = (sum == 0b11111)
-		} else {
-			bitmembers := make([]int, len(mm))
-			i := 0
-			for m := range mm {
-				bitmembers[i] = m
-				i++
-			}
+		bitmembers := make([]int, len(mm))
+		i := 0
+		for m := range mm {
+			bitmembers[i] = m
+			i++
+		}
 
-		b:
-			for i := 0; i < len(bitmembers); i++ {
-				for j := i + 1; j < len(bitmembers); j++ {
-					for k := j + 1; k < len(bitmembers); k++ {
-						if bitmembers[i]|bitmembers[j]|bitmembers[k] == 0b11111 {
-							ret = true
-							break b
-						}
+	b:
+		for i := 0; i < len(bitmembers); i++ {
+			for j := i; j < len(bitmembers); j++ {
+				for k := j; k < len(bitmembers); k++ {
+					if bitmembers[i]|bitmembers[j]|bitmembers[k] == 0b11111 {
+						ret = true
+						break b
 					}
 				}
 			}
