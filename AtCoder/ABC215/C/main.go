@@ -53,11 +53,12 @@ func f(cnt, goal int, s []rune) (int, []rune) {
 	if len(s) == 1 {
 		return cnt + 1, s
 	}
+
+	arg := make([]rune, len(s)-1)
 	for i, v := range s {
 		if i > 0 && s[i-1] == v {
 			continue
 		}
-		arg := make([]rune, len(s)-1)
 		for j, c := range s {
 			if j < i {
 				arg[j] = c
