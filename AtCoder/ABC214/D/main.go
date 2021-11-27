@@ -21,6 +21,7 @@ func readInt() int {
 }
 
 // Disjoint Set Union: Union Find Tree
+// https://atcoder.jp/contests/abc214/submissions/25069105
 
 type DSU struct {
 	parentOrSize []int
