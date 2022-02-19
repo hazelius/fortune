@@ -22,36 +22,49 @@ func run(r io.Reader) int {
 
 	n, k := readInt(), readInt()
 	as := make([]int, n)
+	maxA := 0
 	for i := range as {
-		as[i] = readInt()
-	}
-
-	low, high := 0, 300001
-	for low+1 < high {
-		mid := low + (high-low)/2
-		if isOK(mid, k, as) {
-			low = mid
-		} else {
-			high = mid
+		a := readInt()
+		as[i] = a
+		if maxA < a {
+			maxA = a
 		}
 	}
 
-	return low
-}
-
-func isOK(gdc, k int, as []int) bool {
-	ret := 0
+	tc := 0
 	for _, a := range as {
-		amari := a % gdc
-		if amari > 0 {
-			ret += gdc - amari
+		tc += maxA - a
+	}
+	if tc <= k {
+		k -= tc
+		return maxA + (k / n)
+	}
+
+	cnt := make([]int, 2*maxA)
+	sum := make([]int, 2*maxA)
+
+	for _, a := range as {
+		cnt[a]++
+		sum[a] += a
+	}
+
+	for i := 1; i < 2*maxA; i++ {
+		cnt[i] += cnt[i-1]
+		sum[i] += sum[i-1]
+	}
+
+	ans := 1
+	for x := 2; x < maxA; x++ {
+		bound := 0
+		for i := 1; i <= 1+(maxA-1)/x; i++ {
+			bound += i*x*(cnt[i*x]-cnt[(i-1)*x]) - (sum[i*x] - sum[(i-1)*x])
 		}
-		if ret > k {
-			return false
+		if bound <= k {
+			ans = x
 		}
 	}
 
-	return ret <= k
+	return ans
 }
 
 func main() {

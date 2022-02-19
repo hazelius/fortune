@@ -15,8 +15,8 @@ func Test_run(t *testing.T) {
 		args args
 		want int
 	}{
-		// {name: "1", args: args{r: strings.NewReader(`3 6
-		// 3 4 9`)}, want: 5},
+		{name: "1", args: args{r: strings.NewReader(`3 6
+		3 4 9`)}, want: 5},
 		{name: "2", args: args{r: strings.NewReader(`3 4
 		30 10 20`)}, want: 10},
 	}
