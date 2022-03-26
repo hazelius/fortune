@@ -31,19 +31,15 @@ func run(r io.Reader) string {
 	}
 
 	bs := make([]int, m+1)
-	for i := range bs {
-		c := cs[i]
-		for j := n; j > 0; j-- {
-			if j > i {
+	for i := m; i >= 0; i-- {
+		c := cs[i+n]
+		for j := 0; j < n; j++ {
+			if i+n-j > m {
 				continue
 			}
-			c -= as[j] * bs[i-j]
+			c -= as[j] * bs[i+n-j]
 		}
-		if as[0] == 0 {
-			bs[i] = c
-		} else {
-			bs[i] = c / as[0]
-		}
+		bs[i] = c / as[n]
 	}
 
 	ansstr := fmt.Sprintf("%v", bs)
