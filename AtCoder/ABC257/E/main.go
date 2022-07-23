@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"strconv"
-	"strings"
 )
 
 var sc *bufio.Scanner
@@ -17,8 +16,8 @@ func readInt() int {
 	return i
 }
 
-func run(r io.Reader) string {
-	sc = bufio.NewScanner(r)
+func run(stdin io.Reader, out io.Writer) {
+	sc = bufio.NewScanner(stdin)
 	sc.Split(bufio.ScanWords)
 
 	n := readInt()
@@ -36,29 +35,30 @@ func run(r io.Reader) string {
 	cnt := n / minc
 	yosan := n % minc
 	ans := make([]int, cnt)
+	flg := false
 	for idx := 0; idx < cnt; idx++ {
-		flg := false
-		for i := 8; i > mincIdx; i-- {
+		if flg {
+			ans[idx] = mincIdx + 1
+			continue
+		}
+
+		for i := 8; i >= mincIdx; i-- {
 			if cs[i] <= minc+yosan {
 				ans[idx] = i + 1
 				yosan -= cs[i] - minc
-				flg = true
+				if yosan == 0 || i == mincIdx {
+					flg = true
+				}
 				break
 			}
 		}
-		if flg {
-			continue
-		}
-		for i := idx; i < cnt; i++ {
-			ans[i] = mincIdx + 1
-		}
-		break
 	}
-	ansstr := fmt.Sprintf("%v", ans)
-	ansstr = strings.ReplaceAll(ansstr, " ", "")
-	return ansstr[1 : len(ansstr)-1]
+
+	for _, v := range ans {
+		fmt.Fprint(out, v)
+	}
 }
 
 func main() {
-	fmt.Println(run(os.Stdin))
+	run(os.Stdin, os.Stdout)
 }
