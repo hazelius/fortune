@@ -1,3 +1,7 @@
+// E - Throwing the Die
+// https://atcoder.jp/contests/abc266/tasks/abc266_e
+// 期待値
+
 package main
 
 import (
