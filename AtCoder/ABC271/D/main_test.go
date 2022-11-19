@@ -16,11 +16,11 @@ func Test_run(t *testing.T) {
 		args    args
 		wantOut string
 	}{
-		{name: "1", args: args{stdin: strings.NewReader(`3 11
-		1 4
-		2 3
-		5 7`)}, wantOut: `Yes
-THH`},
+		// 		{name: "1", args: args{stdin: strings.NewReader(`3 11
+		// 		1 4
+		// 		2 3
+		// 		5 7`)}, wantOut: `Yes
+		// THH`},
 		{name: "2", args: args{stdin: strings.NewReader(`5 25
 		2 8
 		9 3
