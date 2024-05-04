@@ -88,27 +88,17 @@ func run(stdin io.Reader, out io.Writer) {
 	uf := newUnionFind(n)
 	x := -1
 	for _, v := range vals {
-		root := -1
-		for i := 0; i < len(v.as)-1; i++ {
-			if i > 0 {
-				if root == uf.root(v.as[i]) {
-					continue
-				}
+		i := 0
+		for j := i + 1; j < len(v.as); j++ {
+			if uf.same(v.as[i], v.as[j]) {
+				continue
 			}
-			for j := i + 1; j < len(v.as); j++ {
-				if uf.same(v.as[i], v.as[j]) {
-					continue
-				}
-				uf.unite(v.as[i], v.as[j])
-				ans += v.c
-				x = v.as[i]
-				if uf.size(x) == n {
-					fmt.Fprint(out, ans)
-					return
-				}
-			}
-			if i == 0 {
-				root = uf.root(v.as[i])
+			uf.unite(v.as[i], v.as[j])
+			ans += v.c
+			x = v.as[i]
+			if uf.size(x) == n {
+				fmt.Fprint(out, ans)
+				return
 			}
 		}
 	}
