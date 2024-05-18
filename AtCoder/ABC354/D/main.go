@@ -42,14 +42,9 @@ var ss = [][]int{
 }
 
 func f(a, b int) int {
-	ret := (a / 4) * 4 * (b / 2) * 2
-	if b%2 > 0 {
-		ret += (a / 4) * 4
-	}
-	if a%4 > 0 {
-		ret += ((b / 2) + b%2) * ss[0][a%4]
-		ret += (b / 2) * ss[1][a%4]
-	}
+	ret := (a / 4) * 4 * b
+	ret += ((b / 2) + b%2) * ss[0][a%4]
+	ret += (b / 2) * ss[1][a%4]
 	return ret
 }
 
