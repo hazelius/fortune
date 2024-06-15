@@ -36,32 +36,22 @@ func run(stdin io.Reader, out io.Writer) {
 		}
 	}
 
-	dp := make([][]int, n+1)
-	for i := range dp {
-		dp[i] = make([]int, 1<<m)
-		for j := range dp[i] {
-			dp[i][j] = 1 << m
+	ans := n
+	for i := 0; i < (1 << n); i++ {
+		cnt := 0
+		v := 0
+		for j := 0; j < n; j++ {
+			if i&(1<<j) > 0 {
+				v |= ss[j]
+				cnt++
+			}
+		}
+		if v == (1<<m)-1 && ans > cnt {
+			ans = cnt
 		}
 	}
 
-	for i, s := range ss {
-		dp[i+1][s] = 1
-		for j, v := range dp[i] {
-			dp[i+1][j] = min(dp[i+1][j], dp[i][j])
-			j |= s
-			v++
-			dp[i+1][j] = min(dp[i+1][j], v)
-		}
-	}
-
-	fmt.Fprint(out, dp[n][1<<m-1])
-}
-
-func min(a, b int) int {
-	if a > b {
-		return b
-	}
-	return a
+	fmt.Fprint(out, ans)
 }
 
 func main() {
