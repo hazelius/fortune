@@ -43,6 +43,7 @@ No
 				d?o`)}, wantOut: `Yes
 Yes
 Yes
+No
 `},
 	}
 	for _, tt := range tests {
