@@ -18,16 +18,17 @@ func readInt() int {
 
 func run(stdin io.Reader, out io.Writer) {
 	sc = bufio.NewScanner(stdin)
-	buf := make([]byte, 1024*1024)
-	sc.Buffer(buf, bufio.MaxScanTokenSize)
 	sc.Split(bufio.ScanWords)
 
 	n := readInt()
-	as := make([]int, n)
-	for i := range as {
-		as[i] = readInt()
+	ans := 0
+	for i := 0; i < n; i++ {
+		a, b := readInt(), readInt()
+		if a < b {
+			ans++
+		}
 	}
-	fmt.Fprint(out, n)
+	fmt.Fprint(out, ans)
 }
 
 func main() {
