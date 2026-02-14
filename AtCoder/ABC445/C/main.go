@@ -28,17 +28,25 @@ func run(stdin io.Reader, out io.Writer) {
 		as[i] = readInt() - 1
 	}
 
-	for i := 0; i < 100; i++ {
-		tmp := make([]int, n)
-		for j := range tmp {
-			tmp[j] = as[as[as[as[as[as[as[as[as[as[j]]]]]]]]]]
-		}
-		as = tmp
+	ans := make([]int, n)
+	for i := range ans {
+		ans[i] = i
 	}
 
-	for _, a := range as {
-		fmt.Fprint(out, a+1, " ")
+	for i := n - 1; i >= 0; i-- {
+		if i == as[i] {
+			ans[i] = i
+		} else {
+			ans[i] = ans[as[i]]
+		}
 	}
+
+	for i := range ans {
+		ans[i]++
+	}
+
+	str := fmt.Sprintf("%v", ans)
+	fmt.Fprint(out, str[1:len(str)-1])
 }
 
 func main() {
