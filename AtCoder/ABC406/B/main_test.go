@@ -21,7 +21,7 @@ func Test_run(t *testing.T) {
 		{name: "2", args: args{stdin: strings.NewReader(`2 1
 2 5`)}, wantOut: `1`},
 		{name: "3", args: args{stdin: strings.NewReader(`6 18
-999999 999999999999 999999999999999 1000000000000 222222222 2`)}, wantOut: `1000`},
+999999 999999999999 999999999999999 1000000000000 222222222 2`)}, wantOut: `2`},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
