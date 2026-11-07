@@ -19,7 +19,7 @@ func Test_run(t *testing.T) {
 		{name: "1", args: args{stdin: strings.NewReader(`motor`)}, wantOut: `10607`},
 		{name: "2", args: args{stdin: strings.NewReader(`byebye`)}, wantOut: `-1`},
 		{name: "3", args: args{stdin: strings.NewReader(`coconut`)}, wantOut: `1010237`},
-		{name: "4", args: args{stdin: strings.NewReader(`coeonuu`)}, wantOut: `1`},
+		{name: "4", args: args{stdin: strings.NewReader(`coeonuu`)}, wantOut: `1020599`},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
